@@ -26,7 +26,11 @@ final class NFCReader: NSObject {
     private var readerSession: NFCTagReaderSession?
     
     /// Session cancellation flag
-    @Published private var cancelled: Bool = false
+    @Published private var cancelled: Bool = false {
+        didSet {
+            Log.nfc("Assigned new value to cancelled: \(cancelled)")
+        }
+    }
     
     /// Session invalidation flag
     @Published private var invalidatedWithError: TangemSdkError? = nil
@@ -65,21 +69,39 @@ final class NFCReader: NSObject {
     //Store session live subscriptions
     private var bag = Set<AnyCancellable>()
     private var sessionConnectCancellable: AnyCancellable? = nil
+    private var helperCancellable: AnyCancellable? = nil
+    private var observer: NSObjectProtocol? = nil
     
     private var sendRetryCount = Constants.retryCount
     private var startRetryCount = Constants.startRetryCount
     private let pollingOption: NFCTagReaderSession.PollingOption
     
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss:SSS"
+        return formatter
+    }()
+    
     init(pollingOption: NFCTagReaderSession.PollingOption = [.iso14443]) {
         self.pollingOption = pollingOption
         super.init()
         
-        NotificationCenter //For instant cancellation
-            .default
-            .publisher(for: UIApplication.didBecomeActiveNotification)
-            .map { _ in return true }
-            .assign (to: \.cancelled, on: self)
-            .store(in: &bag)
+        helperCancellable = isSessionReady.sink(receiveValue: { isReady in
+            Log.nfc("New value for isSessionReady: \(isReady)")
+        })
+//        notifCenterCancellable = NotificationCenter //For instant cancellation
+//            .default
+//            .publisher(for: UIApplication.didBecomeActiveNotification)
+//            .print("\(self.dateFormatter.string(from: Date())): NFC reader notif. center publisher", to: nil)
+//            .filter { [unowned self] _ in
+//                Log.nfc("NFC reader receive new notification didBecomeActive while session is ready: \(self.isSessionReady.value)")
+//                return self.isSessionReady.value }
+//            .map { _ in
+//                Log.nfc("NFC reader receive new notification didBecomeActive while session is ready: \(self.isSessionReady.value)")
+//                return true
+//            }
+//            .assign (to: \.cancelled, on: self)
+//            .store(in: &bag)
     }
     
     deinit {
@@ -103,6 +125,7 @@ extension NFCReader: CardReader {
     func startSession(with message: String?) {
         Log.nfc("Start NFC session")
         queue = DispatchQueue(label: "tangem_sdk_reader_queue")
+        Log.nfc("Resetting reader variables")
         bag = Set<AnyCancellable>()
         isPaused = false
         invalidatedWithError = nil
@@ -112,12 +135,26 @@ extension NFCReader: CardReader {
         let alertMessage = message ?? Localization.nfcAlertDefault
         _alertMessage = alertMessage
         
-        let isExistingSessionActive = readerSession?.isReady ?? false
-        if !isExistingSessionActive {
-            startNFCStuckTimer()
-            start()
-        }
+        Log.nfc("Creating new subscriptions for NFC reader")
         
+        NotificationCenter //For instant cancellation
+            .default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
+            .filter { [unowned self] _ in
+                Log.nfc("NFC reader notification didBecomeActive filtering by session is ready: \(self.isSessionReady.value)")
+                return self.isSessionReady.value
+            }
+            .map { _ -> Bool in
+                Log.nfc("NFC reader receive new notification didBecomeActive while session is ready: \(self.isSessionReady.value)")
+                return true
+            }
+//            .assign (to: \.cancelled, on: self)
+            .sink(receiveValue: { _ in
+                Log.nfc("NFC reader receive filtered event. Cancelling sessions")
+            })
+            .store(in: &bag)
+        
+        Log.nfc("Notification center subscription and observer created")
         $cancelled //speed up cancellation if no tag interaction
             .dropFirst()
             .filter { $0 }
@@ -193,6 +230,13 @@ extension NFCReader: CardReader {
                 session.restartPolling()
             }
             .store(in: &bag)
+        
+        let isExistingSessionActive = readerSession?.isReady ?? false
+        if !isExistingSessionActive {
+            startNFCStuckTimer()
+            Log.nfc("Starting NFC session from startSession with message")
+            start()
+        }
     }
     
     func resumeSession() {
@@ -233,6 +277,7 @@ extension NFCReader: CardReader {
         }
         
         let requestTimestamp = Date()
+        Log.nfc("Send publisher is cancelled: \(cancelled)")
         Log.apdu(apdu)
         return tag
             .sendCommandPublisher(cApdu: apdu)
@@ -292,6 +337,7 @@ extension NFCReader: CardReader {
                     self.invalidatedWithError = .nfcStuck
                     self.nfcStuckTimerCancellable = nil
                 } else {
+                    Log.nfc("Starting NFC session from NFCStuckTimer")
                     self.start()
                 }
             }
@@ -345,6 +391,7 @@ extension NFCReader: CardReader {
 //MARK: NFCTagReaderSessionDelegate
 extension NFCReader: NFCTagReaderSessionDelegate {
     func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
+        Log.nfc("Tag reader session did become active")
         isSessionReady.send(true)
     }
     
