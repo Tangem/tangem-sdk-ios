@@ -98,6 +98,7 @@
 
 "error_no_space_for_new_wallet" = "Max number of wallets already created";
 "error_card_read_wrong_wallet" = "Card read wrong wallet";
+
 "error_wrong_pin1" = "Wrong Access Сode";
 "error_wrong_pin2" = "Wrong Passcode";
 

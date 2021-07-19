@@ -11,7 +11,7 @@ import Foundation
 @available (iOS 13.0, *)
 public protocol DataToWrite: FirmwareRestictible {
 	var data: Data { get }
-	var requiredPin2: Bool { get }
+	var requiredPasscode: Bool { get }
 	func addStartingTlvData(_ tlvBuilder: TlvBuilder, withEnvironment environment: SessionEnvironment) throws ->  TlvBuilder
 	func addFinalizingTlvData(_ tlvBuilder: TlvBuilder, withEnvironment environment: SessionEnvironment) throws -> TlvBuilder
 }
@@ -22,7 +22,7 @@ public protocol DataToWrite: FirmwareRestictible {
 public struct FileDataProtectedBySignature: DataToWrite {
 	public let data: Data
 	
-	public var requiredPin2: Bool { false }
+	public var requiredPasscode: Bool { false }
 	public var minFirmwareVersion: FirmwareVersion { settings.minFirmwareVersion() }
 	public var maxFirmwareVersion: FirmwareVersion { settings.maxFirmwareVersion() }
 	
@@ -57,22 +57,22 @@ public struct FileDataProtectedBySignature: DataToWrite {
 public struct FileDataProtectedByPasscode: DataToWrite {
 	public let data: Data
 	
-	public var requiredPin2: Bool { true }
+	public var requiredPasscode: Bool { true }
 	public var minFirmwareVersion: FirmwareVersion { settings.minFirmwareVersion() }
 	public var maxFirmwareVersion: FirmwareVersion { settings.maxFirmwareVersion() }
 	
-	var settings: Set<FileWriteSettings> = [.verifiedWithPin2]
+	var settings: Set<FileWriteSettings> = [.verifiedWithPasscode]
 	
 	public init(data: Data) {
 		self.data = data
 	}
 	
 	public func addStartingTlvData(_ tlvBuilder: TlvBuilder, withEnvironment environment: SessionEnvironment) throws -> TlvBuilder {
-		try tlvBuilder.append(.pin2, value: environment.pin2.value)
+		try tlvBuilder.append(.pin2, value: environment.passcode.value)
 	}
 	
 	public func addFinalizingTlvData(_ tlvBuilder: TlvBuilder, withEnvironment environment: SessionEnvironment) throws -> TlvBuilder {
 		try tlvBuilder.append(.codeHash, value: data.getSha256())
-			.append(.pin2, value: environment.pin2.value)
+			.append(.pin2, value: environment.passcode.value)
 	}
 }

@@ -10,6 +10,7 @@ import XCTest
 @testable import TangemSdk
 import CryptoKit
 
+@available(iOS 13.0, *)
 class CryptoUtilsTests: XCTestCase {
     
     override func setUp() {

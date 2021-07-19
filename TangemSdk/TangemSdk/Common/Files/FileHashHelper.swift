@@ -9,6 +9,7 @@
 import Foundation
 
 /// Use this helper when creating signatures for files that signed by issuer
+@available(iOS 13.0, *)
 public struct FileHashHelper {
 	
 	/// Creating hashes for `FileDataProtectedBySignature`

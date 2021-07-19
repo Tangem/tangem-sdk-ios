@@ -431,6 +431,7 @@ class ScanCardAnimatedView: UIView {
 	
 }
 
+@available(iOS 13.0, *)
 extension ScanCardAnimatedView: CAAnimationDelegate {
 	
 	func animationDidStart(_ anim: CAAnimation) {

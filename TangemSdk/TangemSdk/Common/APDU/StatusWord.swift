@@ -9,6 +9,7 @@
 import Foundation
 
 /// Part of a response from the card, shows the status of the operation   (combined sw1 and sw2)
+@available(iOS 13.0, *)
 public enum StatusWord: UInt16 {
     case unknown = 0x0000
     case processCompleted = 0x9000

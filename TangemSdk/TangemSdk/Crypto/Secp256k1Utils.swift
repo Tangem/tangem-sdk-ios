@@ -9,6 +9,7 @@
 import Foundation
 import TangemSdk_secp256k1
 
+@available(iOS 13.0, *)
 public final class Secp256k1Utils {
     static let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY))
     

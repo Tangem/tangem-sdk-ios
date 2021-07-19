@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 
 /// Wrapper for a message that can be shown to user after a start of NFC session.
-public struct Message: Codable, JSONStringConvertible {
+@available(iOS 13.0, *)
+public struct Message: Codable {
     let header: String?
     let body: String?
     
@@ -36,11 +37,22 @@ public struct Message: Codable, JSONStringConvertible {
         self.header = header
         self.body = body
     }
+    
+    public init?(_ jsonString: String) {
+        guard let jsonData = jsonString.data(using: .utf8),
+              let decoded = try? JSONDecoder.tangemSdkDecoder.decode(Message.self, from: jsonData) else {
+            return nil
+        }
+
+        self.header = decoded.header
+        self.body = decoded.body
+    }
 }
 
 
 /// Allows interaction with users and shows visual elements.
 /// Its default implementation, `DefaultSessionViewDelegate`, is in our SDK.
+@available(iOS 13.0, *)
 public protocol SessionViewDelegate: AnyObject {
     func showAlertMessage(_ text: String)
     
@@ -49,11 +61,11 @@ public protocol SessionViewDelegate: AnyObject {
     
     func showPercentLoading(_ percent: Int, message: Message?, hint: String?)
     
-    /// It is called when a user is expected to enter pin1 code.
-    func requestPin(pinType: PinCode.PinType, cardId: String?, completion: @escaping (_ pin: String?) -> Void)
+    /// It is called when a user is expected to enter user code.
+    func requestUserCode(type: UserCodeType, cardId: String?, completion: @escaping (_ code: String?) -> Void)
     
-    /// It is called when a user is expected to enter pin1 code.
-    func requestPinChange(pinType: PinCode.PinType, cardId: String?, completion: @escaping CompletionResult<(currentPin: String, newPin: String)>)
+    /// It is called when a user is expected to change  user code.
+    func requestUserCodeChange(type: UserCodeType, cardId: String?, completion: @escaping CompletionResult<(currentCode: String, newCode: String)>)
     
     /// It is called when tag was found
     func tagConnected()
@@ -67,7 +79,7 @@ public protocol SessionViewDelegate: AnyObject {
     
     func sessionStarted()
     
-    func sessionStopped()
+    func sessionStopped(completion: (() -> Void)?)
     
     func sessionInitialized()
 	
@@ -76,4 +88,10 @@ public protocol SessionViewDelegate: AnyObject {
 	func showInfoScreen()
     
     func setConfig(_ config: Config)
+    
+    func attesttionDidFail(isDevelopmentCard: Bool, onContinue: @escaping () -> Void, onCancel: @escaping () -> Void)
+    
+    func attestationCompletedWithWarnings(onContinue: @escaping () -> Void)
+    
+    func attestationCompletedOffline(onContinue: @escaping () -> Void, onCancel: @escaping () -> Void, onRetry: @escaping () -> Void)
 }

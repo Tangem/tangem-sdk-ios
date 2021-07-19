@@ -1,0 +1,15 @@
+{
+    "request" : {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "depersonalize",
+        "params": {}
+    },
+    "response" : {
+        "jsonrpc" : "2.0",
+        "result" : {
+            "success": true
+        },
+        "id" : 1
+    }
+}

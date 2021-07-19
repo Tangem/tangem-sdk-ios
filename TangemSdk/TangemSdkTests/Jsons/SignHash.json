@@ -1,0 +1,20 @@
+{
+    "request" : {
+        "jsonrpc": "2.0",
+        "method": "sign_hash",
+        "params": {
+            "walletPublicKey": "5130869115a2ff91959774c99d4dc2873f0c41af3e0bb23d027ab16d39de1348",
+            "hash": "f1642bb080e1f320924dde7238c1c5f8"
+        },
+        "id": 1
+    },
+    "response" :  {
+        "jsonrpc" : "2.0",
+        "result" : {
+            "cardId": "c000111122223333",
+            "signature": "eb7411c2b7d871c06dad51e58e44746583ad134f4e214e4899f2fc84802232a1",
+            "totalSignedHashes": 2
+        },
+        "id" : 1
+    }
+}

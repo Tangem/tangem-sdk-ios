@@ -12,13 +12,14 @@ import CoreNFC
 import UIKit
 
 /// Provides NFC communication between an application and Tangem card.
+@available(iOS 13.0, *)
 final class NFCReader: NSObject {
     private(set) var tag = CurrentValueSubject<NFCTagType?, TangemSdkError>(nil)
     private(set) var isSessionReady = CurrentValueSubject<Bool, Never>(false)
     
     /// Session paused indicator for pins UI
     
-    private var isPaused = false
+    var isPaused = false
     
     /// Current connected tag
     private var connectedTag: NFCTag? = nil
@@ -83,6 +84,7 @@ final class NFCReader: NSObject {
 }
 
 //MARK: CardReader
+@available(iOS 13.0, *)
 extension NFCReader: CardReader {
     var alertMessage: String {
         get { return _alertMessage ?? "" }
@@ -125,7 +127,7 @@ extension NFCReader: CardReader {
             }
             .assign (to: \.cancelled, on: self)
             .store(in: &bag)
-        
+
         $cancelled //speed up cancellation if no tag interaction
             .dropFirst()
             .filter { $0 }
@@ -351,6 +353,7 @@ extension NFCReader: CardReader {
 }
 
 //MARK: NFCTagReaderSessionDelegate
+@available(iOS 13.0, *)
 extension NFCReader: NFCTagReaderSessionDelegate {
     func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
         sessionDidBecomeActiveTimestamp = Date()
@@ -387,6 +390,7 @@ extension NFCReader: NFCTagReaderSessionDelegate {
 }
 
 //MARK: Constants
+@available(iOS 13.0, *)
 extension NFCReader {
     enum Constants {
         static let tagTimeout = 20.0

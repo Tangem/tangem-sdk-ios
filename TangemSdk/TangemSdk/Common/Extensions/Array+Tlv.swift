@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(iOS 13.0, *)
 extension Array where Element == Tlv {
     /// Serialize array of tlv items to Data
     /// - Parameter array: tlv array

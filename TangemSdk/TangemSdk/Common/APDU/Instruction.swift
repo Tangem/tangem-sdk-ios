@@ -13,13 +13,13 @@ import Foundation
 public enum Instruction: Byte {
 	case unknown = 0x00
 	case read = 0xF2
-	case verifyCard = 0xF3
-	case validateCard = 0xF4
-	case verifyCode = 0xF5
+	case attestCardKey = 0xF3
+	case attestCardUniqueness = 0xF4
+	case attestCardFirmware = 0xF5
 	case writeIssuerData = 0xF6
 	case readIssuerData = 0xF7
 	case createWallet = 0xF8
-	case checkWallet = 0xF9
+	case attestWalletKey = 0xF9
 	case setPin = 0xFA
 	case sign = 0xFB
 	case purgeWallet = 0xFC
@@ -32,3 +32,4 @@ public enum Instruction: Byte {
 	case readFileData = 0xD1
 	case writeFileData = 0xD0
 }
+

@@ -10,6 +10,7 @@ import Foundation
 import XCTest
 @testable import TangemSdk
 
+@available(iOS 13.0, *)
 class IntUtilsTests: XCTestCase {
     func testFromHexConversion() {
         let testData = Data(hexString: "9569")

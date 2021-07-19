@@ -8,26 +8,6 @@
 
 import UIKit
 
-internal extension CABasicAnimation {
-	convenience init(keyPath: String, from: Any?, to: Any?, reversed: Bool, fillMode: CAMediaTimingFillMode = .forwards, isRemovedOnCompletion: Bool = false, repeatCount: Float = 1, autoreverses: Bool = false, duration: Double? = nil, delay: Double = 0, shouldDelayAffectDuration: Bool = false) {
-		
-		self.init(keyPath: keyPath)
-		fromValue = reversed ? from : to
-		toValue = reversed ? to : from
-		self.fillMode = fillMode
-		self.isRemovedOnCompletion = isRemovedOnCompletion
-		self.repeatCount = repeatCount
-		self.autoreverses = autoreverses
-		
-		if let d = duration {
-			self.duration = d
-			self.duration += shouldDelayAffectDuration ? delay : 0
-		}
-		
-		self.beginTime = delay
-	}
-}
-
 internal extension CAKeyframeAnimation {
 	convenience init(keyPath: String, values: [Any], keyTimes: [NSNumber], reversed: Bool, fillMode: CAMediaTimingFillMode = .forwards, isRemovedOnCompletion: Bool = false, repeatCount: Float = 1, autoreverses: Bool = false, duration: Double? = nil, delay: Double = 0, shouldDelayAffectDuration: Bool = false) {
 		

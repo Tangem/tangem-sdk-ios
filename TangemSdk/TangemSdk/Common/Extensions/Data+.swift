@@ -10,21 +10,18 @@ import Foundation
 import CryptoKit
 import CommonCrypto
 
-extension Array: JSONStringConvertible where Element: JSONStringConvertible { }
-extension Data: JSONStringConvertible {}
-extension String: JSONStringConvertible { }
-
+@available(iOS 13.0, *)
 extension Data {
-    public var description: String {
-        return asHexString()
-    }
-    
-    public func asHexString() -> String {
+    public var hexString: String {
         return self.map { return String(format: "%02X", $0) }.joined()
     }
     
-    public func toUtf8String() -> String? {
+    public var utf8String: String? {
         return String(bytes: self, encoding: .utf8)?.remove("\0")
+    }
+    
+    public var description: String {
+        return hexString
     }
     
     public func toInt() -> Int {
@@ -186,7 +183,7 @@ extension Data {
 			return Secp256k1Utils.sign(self, with: privateKey)
 		default:
 			// TODO: Create sign for ED25519 and secp256r1 curve
-			fatalError("Not implemented data sign for ED25519 curve")
+			fatalError("Sign not implemented for this curve")
 		}
 	}
 }

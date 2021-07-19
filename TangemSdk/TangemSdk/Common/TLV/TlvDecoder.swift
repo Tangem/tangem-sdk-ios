@@ -10,6 +10,7 @@ import Foundation
 
 /// Decode value fields in `Tlv` from raw bytes to concrete types
 /// according to their `TlvTag` and corresponding `TlvValueType`.
+@available(iOS 13.0, *)
 public final class TlvDecoder {
     let tlv: [Tlv]
     
@@ -27,9 +28,9 @@ public final class TlvDecoder {
      *
      * - Returns: Value converted to an optional type `T`.
      */
-    public func decodeOptional<T>(_ tag: TlvTag) throws -> T? {
+    public func decode<T>(_ tag: TlvTag) throws -> T where T: ExpressibleByNilLiteral {
         do {
-            let decoded: T = try innerDecode(tag, tagValue: tlv.value(for: tag), asOptional: true)
+            let decoded: T = try innerDecode(tag, tagValue: tlv.value(for: tag))
             logTlv(tag, decoded)
             return decoded
         } catch TangemSdkError.decodingFailedMissingTag {
@@ -52,7 +53,7 @@ public final class TlvDecoder {
      */
     public func decode<T>(_ tag: TlvTag) throws -> T {
         do {
-            let decoded: T = try innerDecode(tag, tagValue: tlv.value(for: tag), asOptional: false)
+            let decoded: T = try innerDecode(tag, tagValue: tlv.value(for: tag))
             logTlv(tag, decoded)
             return decoded
         } catch {
@@ -68,12 +69,12 @@ public final class TlvDecoder {
         }
         
         return try tlvs.map {
-            let decoded: T = try innerDecode(tag, tagValue: $0.value, asOptional: false)
+            let decoded: T = try innerDecode(tag, tagValue: $0.value)
             return decoded
         }
     }
     
-    func innerDecode<T>(_ tag: TlvTag, tagValue: Data?, asOptional: Bool) throws -> T {
+    func innerDecode<T>(_ tag: TlvTag, tagValue: Data?) throws -> T {
         guard let tagValue = tagValue else {
             if tag.valueType == .boolValue {
                 guard Bool.self == T.self || Bool?.self == T.self else {
@@ -89,12 +90,12 @@ public final class TlvDecoder {
         switch tag.valueType {
         case .hexString:
             try typeCheck(String.self, T.self, for: tag)
-            let hexString = tagValue.asHexString()
+            let hexString = tagValue.hexString
             return hexString as! T
         case .utf8String:
             try typeCheck(String.self, T.self, for: tag)
             
-            guard let utfValue = tagValue.toUtf8String() else {
+            guard let utfValue = tagValue.utf8String else {
                 throw TangemSdkError.decodingFailed("Decoding error. Failed to convert \(tag) to utf8 string")
             }
             
@@ -108,7 +109,7 @@ public final class TlvDecoder {
             return tagValue as! T
         case .ellipticCurve:
             try typeCheck(EllipticCurve.self, T.self, for: tag)
-            guard let utfValue = tagValue.toUtf8String(),
+            guard let utfValue = tagValue.utf8String,
                   let curve = EllipticCurve(rawValue: utfValue) else {
                 throw TangemSdkError.decodingFailed("Decoding error. Failed convert \(tag) to utfValue and curve")
             }
@@ -133,23 +134,30 @@ public final class TlvDecoder {
             let productMask = ProductMask(rawValue: byte)
             return productMask as! T
         case .settingsMask:
-            try typeCheck(SettingsMask.self, T.self, for: tag)
-            let intValue = tagValue.toInt()
-            let settingsMask = SettingsMask(rawValue: intValue)
-            return settingsMask as! T
+            do {
+                try typeCheck(CardSettingsMask.self, T.self, for: tag)
+                let intValue = tagValue.toInt()
+                let settingsMask = CardSettingsMask(rawValue: intValue)
+                return settingsMask as! T
+            } catch TangemSdkError.decodingFailedTypeMismatch {
+                try typeCheck(WalletSettingsMask.self, T.self, for: tag)
+                let intValue = tagValue.toInt()
+                let settingsMask = WalletSettingsMask(rawValue: intValue)
+                return settingsMask as! T
+            }
         case .status:
             do {
-                try typeCheck(CardStatus.self, T.self, for: tag)
+                try typeCheck(Card.Status.self, T.self, for: tag)
                 let intValue = tagValue.toInt()
-                guard let cardStatus = CardStatus(rawValue: intValue) else {
+                guard let cardStatus = Card.Status(rawValue: intValue) else {
                     throw TangemSdkError.decodingFailed("Decoding error. Failed convert \(tag) to int and CardStatus")
                 }
                 
                 return cardStatus as! T
             } catch TangemSdkError.decodingFailedTypeMismatch {
-                try typeCheck(WalletStatus.self, T.self, for: tag)
+                try typeCheck(Card.Wallet.Status.self, T.self, for: tag)
                 let intValue = tagValue.toInt()
-                guard let walletStatus = WalletStatus(rawValue: intValue) else {
+                guard let walletStatus = Card.Wallet.Status(rawValue: intValue) else {
                     throw TangemSdkError.decodingFailed("Decoding error. Failed convert \(tag) to int and WalletStatus")
                 }
                 return walletStatus as! T
@@ -199,4 +207,5 @@ public final class TlvDecoder {
     }
 }
 
+@available(iOS 13.0, *)
 extension TlvDecoder: TlvLogging { }

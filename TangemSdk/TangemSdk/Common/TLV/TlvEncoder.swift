@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(iOS 13.0, *)
 public final class TlvEncoder {
     public func encode<T>(_ tag: TlvTag, value: T?) throws -> Tlv {
         do {
@@ -80,8 +81,8 @@ public final class TlvEncoder {
             return Data([mask.rawValue])
         case .settingsMask:
 			do {
-				try typeCheck(value, SettingsMask.self, for: tag)
-				let mask = value as! SettingsMask
+                try typeCheck(value, CardSettingsMask.self, for: tag)
+                let mask = value as! CardSettingsMask
 				let rawValue = mask.rawValue
 				if 0xFFFF0000 & rawValue != 0 {
 					 return rawValue.bytes4
@@ -92,8 +93,8 @@ public final class TlvEncoder {
                 Log.warning("Settings mask type is not Card settings mask. Trying to check WalletSettingsMask")
 			}
 			
-			try typeCheck(value, WalletSettingsMask.self, for: tag)
-			let mask = value as! WalletSettingsMask
+            try typeCheck(value, WalletSettingsMask.self, for: tag)
+            let mask = value as! WalletSettingsMask
 			return mask.rawValue.bytes4
         case .status:
             guard let statusType = value as? StatusType else {
@@ -123,4 +124,5 @@ public final class TlvEncoder {
     }
 }
 
+@available(iOS 13.0, *)
 extension TlvEncoder: TlvLogging {}

@@ -8,6 +8,7 @@
 import XCTest
 @testable import TangemSdk
 
+@available(iOS 13.0, *)
 class DataExtensionTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -61,14 +62,14 @@ class DataExtensionTests: XCTestCase {
     
     func testToHexConversion() {
         let testData = Data([UInt8(0x07),UInt8(0xE2),UInt8(0x07),UInt8(0x1B)])
-        let hex = testData.asHexString()
+        let hex = testData.hexString
         XCTAssertEqual(hex, "07E2071B")
     }
     
     func testToUtf8Conversion() {
         let testData = Data(hexString: "736563703235366B3100")
         let testString = "secp256k1"
-        let converted = testData.toUtf8String()
+        let converted = testData.utf8String
         XCTAssertNotNil(converted)
         XCTAssertEqual(converted!, testString)
     }

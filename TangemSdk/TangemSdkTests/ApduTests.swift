@@ -11,6 +11,7 @@ import XCTest
 import CoreNFC
 @testable import TangemSdk
 
+@available(iOS 13.0, *)
 class ApduTests: XCTestCase {
     func testInitialization() {
         let commandApdu1 = CommandApdu(Instruction.read, tlv: Data())

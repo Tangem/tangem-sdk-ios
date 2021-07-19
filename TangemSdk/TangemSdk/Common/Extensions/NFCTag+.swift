@@ -9,6 +9,7 @@
 import Foundation
 import CoreNFC
 
+@available(iOS 13.0, *)
 extension NFCTag {
     var tagType: NFCTagType {
         switch self {

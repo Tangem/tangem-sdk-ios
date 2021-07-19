@@ -8,8 +8,9 @@
 
 import UIKit
 
+@available(iOS 13.0, *)
 class ChangePinViewController: UIViewController, UITextFieldDelegate {
-    var completionHandler: CompletionResult<(currentPin: String, newPin: String)>
+    var completionHandler: CompletionResult<(currentCode: String, newCode: String)>
     let state: PinViewControllerState
     let cardId: String?
     var validationTimer: Timer? = nil
@@ -56,7 +57,7 @@ class ChangePinViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    init?(coder: NSCoder, state: PinViewControllerState, cardId: String? = nil, completionHandler: @escaping CompletionResult<(currentPin: String, newPin: String)>) {
+    init?(coder: NSCoder, state: PinViewControllerState, cardId: String? = nil, completionHandler: @escaping CompletionResult<(currentCode: String, newCode: String)>) {
         self.completionHandler = completionHandler
         self.state = state
         self.cardId = cardId
@@ -86,7 +87,7 @@ class ChangePinViewController: UIViewController, UITextFieldDelegate {
     @IBAction func btnSaveTapped(_ sender: UIButton) {
         self.dismiss(animated: true) {
             if let newText = self.newText.text?.trim() {
-                self.completionHandler(.success((currentPin: "", newPin: newText)))
+                self.completionHandler(.success((currentCode: "", newCode: newText)))
             } else {
                 self.completionHandler(.failure(.unknownError))
             }
@@ -104,6 +105,7 @@ class ChangePinViewController: UIViewController, UITextFieldDelegate {
         confirmText.isSecureTextEntry.toggle()
     }
     
+    @available(iOS 13.0, *)
     @IBAction func textFieldChanged(_ sender: UITextField) {
         validationTimer?.invalidate()
         validationTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] timer in

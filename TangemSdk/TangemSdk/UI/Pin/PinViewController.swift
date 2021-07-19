@@ -13,6 +13,7 @@ enum PinViewControllerState {
     case pin2
 }
 
+@available(iOS 13.0, *)
 class PinViewController: UIViewController, UITextFieldDelegate {
     
     var completionHandler: (String?) -> Void

@@ -9,10 +9,12 @@
 import Foundation
 import CoreNFC
 
+@available(iOS 13.0, *)
 private protocol SlixTagReader {
     func readSlix2Tag(_ tag: NFCISO15693Tag, completion: @escaping (Result<Data, TangemSdkError>) -> Void)
 }
 
+@available(iOS 13.0, *)
 extension NFCReader: SlixTagReader {
     func readSlix2Tag(_ tag: NFCISO15693Tag, completion: @escaping (Result<Data, TangemSdkError>) -> Void) {
         tag.readMultipleBlocks(requestFlags: [.highDataRate], blockRange: NSRange(location: 0, length: 40)) { [weak self] data1, error in
@@ -37,6 +39,7 @@ extension NFCReader: SlixTagReader {
 }
 
 //Slix2 tag support. TODO: Refactor. Useful for payload retrieve
+@available(iOS 13.0, *)
 private extension ResponseApdu {
     init?(slix2Data: Data) {
         let ndefTlvData = slix2Data[4...] //cut e1402801 (CC)

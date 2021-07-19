@@ -19,8 +19,8 @@ class InformationScreenViewController: UIViewController {
 		return controller
 	}
 	
-	enum State {
-		case howToScan, spinner, securityDelay, percentProgress, idle
+    enum State: Equatable {
+        case howToScan, spinner, pausedSpinner, securityDelay, percentProgress, idle
 	}
 	
 	@IBOutlet weak var howToScanView: ScanCardAnimatedView!
@@ -28,7 +28,8 @@ class InformationScreenViewController: UIViewController {
 	@IBOutlet weak var spinnerView: SpinnerView!
 	@IBOutlet weak var hintLabel: UILabel!
 	@IBOutlet weak var indicatorLabel: UILabel!
-	
+    @IBOutlet weak var tapToCloseLabel: UILabel!
+    
 	@IBOutlet weak var indicatorTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var hintLabelTopConstraint: NSLayoutConstraint!
 	
@@ -70,6 +71,7 @@ class InformationScreenViewController: UIViewController {
 		
 		var spinnerTargetAlpha: CGFloat = 0
 		var howToScanTargetAlpha: CGFloat = 0
+        var tapToCloseTargetAlpha: CGFloat = 1
 		var indicatorTargetAlpha: CGFloat = 0
 		var hintText: String = ""
 		self.state = state
@@ -83,18 +85,22 @@ class InformationScreenViewController: UIViewController {
 		case .spinner:
 			hintText = Localization.nfcAlertDefault
 			spinnerTargetAlpha = 1
+        case .pausedSpinner:
+            spinnerTargetAlpha = 1
+            tapToCloseTargetAlpha = 0
 		case .idle:
 			spinner.stopAnimation()
 			howToScan.stopAnimation()
 		}
 		
-		state == .spinner ? spinner.startAnimation() : spinner.stopAnimation()
+		state == .spinner || state == .pausedSpinner  ? spinner.startAnimation() : spinner.stopAnimation()
 		hintLabel.text = hintText
 		
 		UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
 			howToScan.alpha = howToScanTargetAlpha
 			indicator.alpha = indicatorTargetAlpha
 			spinner.alpha = spinnerTargetAlpha
+            self.tapToCloseLabel.alpha = tapToCloseTargetAlpha
 		}, completion: { _ in
 			state == .howToScan ? howToScan.startAnimation() : howToScan.stopAnimation()
 		})

@@ -9,6 +9,7 @@
 import Foundation
 
 /// The data converted to the Tag Length Value protocol.
+@available(iOS 13.0, *)
 public struct Tlv: Equatable {
     public let tag: TlvTag
     public let tagRaw: Byte
@@ -93,6 +94,7 @@ public struct Tlv: Equatable {
     }
 }
 
+@available(iOS 13.0, *)
 extension Tlv: CustomStringConvertible {
     public var description: String {
         let tagName = "\(tag)".capitalizingFirst()

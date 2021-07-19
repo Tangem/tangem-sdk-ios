@@ -135,7 +135,7 @@ public extension Log {
         case debug
         case verbose
         case custom(logLevel: [Log.Level],
-                    loggers: [TangemSdkLogger])
+                    loggers: [TangemSdkLogger] = [ConsoleLogger()])
         
         internal var logLevel: [Log.Level] {
             switch self {

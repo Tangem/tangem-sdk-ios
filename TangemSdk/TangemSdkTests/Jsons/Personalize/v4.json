@@ -1,0 +1,88 @@
+{
+ "request": {
+        "jsonrpc": "2.0",
+        "method": "personalize",
+        "params": {
+            "config": {
+                "releaseVersion": true,
+                "issuerName": "TANGEM AG",
+                "series": "CB",
+                "startNumber": 7900000000000,
+                "count": 2500,
+                "numberFormat": "",
+                "PIN": "000000",
+                "PIN2": "000",
+                "CVC": "000",
+                "walletsCount": 40,
+                "pauseBeforePIN2": 30000,
+                "smartSecurityDelay": true,
+                "curveID": "secp256k1",
+                "SigningMethod": 0,
+                "isReusable": false,
+                "allowSwapPIN": false,
+                "allowSwapPIN2": true,
+                "useActivation": false,
+                "useCVC": false,
+                "useNDEF": true,
+                "useBlock": false,
+                "allowSelectBlockchain": true,
+                "forbidPurgeWallet": true,
+                "protocolAllowUnencrypted": true,
+                "protocolAllowStaticEncryption": true,
+                "forbidDefaultPIN": false,
+                "skipSecurityDelayIfValidatedByIssuer": false,
+                "skipCheckPIN2andCVCIfValidatedByIssuer": false,
+                "skipSecurityDelayIfValidatedByLinkedTerminal": true,
+                "disableIssuerData": true,
+                "disableUserData": false,
+                "disableFiles": true,
+                "NDEF": [
+                    {
+                        "type": "URI",
+                        "value": "https://tangem.com/ndef/CB79"
+                    }
+                ],
+                "cardData": {
+                    "date": "2021-03-15",
+                    "batch": "CB79",
+                    "blockchain": "ANY",
+                    "product_note": true,
+                    "product_tag": false,
+                    "product_id_card": false,
+                    "product_id_issuer": false,
+                    "product_authentication": false,
+                    "product_twin": false
+                },
+                "createWallet": 0
+            },
+            "manufacturer": {
+                "keyPair": {
+                    "privateKey": "1b48cfd24bbb5b394771ed81f2bacf57479e4735eb1405083927372d40da9e92",
+                    "publicKey": "04bab86d56298c996f564a84fc88e28aed38184b12f07e519113bef48c76f3df3adc303599b08ac05b55ec3df98d9338573a6242f76f5d28f4f0f364e87e8fca2f"
+                },
+                "name": "Tangem"
+            },
+            "issuer": {
+                "dataKeyPair": {
+                    "privateKey": "11121314151617184771ED81F2BACF57479E4735EB1405083927372D40DA9E92",
+                    "publicKey": "045f16bd1d2eafe463e62a335a09e6b2bbcbd04452526885cb679fc4d27af1bd22f553c7deefb54fd3d4f361d14e6dc3f11b7d4ea183250a60720ebdf9e110cd26"
+                },
+                "transactionKeyPair": {
+                    "privateKey": "11121314151617184771ED81F2BACF57479E4735EB1405081918171615141312",
+                    "publicKey": "0484c5192e9bfa6c528a344f442137a92b89ea835bfef1d04cb4362eb906b508c5889846cfea71ba6dc7b3120c2208df9c46127d3d85cb5cfbd1479e97133a39d8"
+                },
+                "name": "TANGEM SDK",
+                "id": "TANGEM SDK"
+            },
+            "acquirer": {
+                "keyPair": {
+                    "privateKey": "21222324252627284771ED81F2BACF57479E4735EB1405083927372D40DA9E92",
+                    "publicKey": "0456ad1a82b22bcb40c38fd08939f87e6b80e40dec5b3bdb351c55fcd709e47f9fb2ed00c2304d3a986f79c5ae0ac3c84e88da46dc8f513b7542c716af8c9a2daf"
+                },
+                "name": "Smart Cash",
+                "id": "Smart Cash"
+            }
+        },
+        "id": 1
+    }
+}

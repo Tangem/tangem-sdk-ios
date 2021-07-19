@@ -96,6 +96,7 @@ public enum TlvTag: Byte {
     case tokenSymbol = 0xA0
     case tokenContractAddress = 0xA1
     case tokenDecimal = 0xA2
+    case tokenName = 0xA3
     case denomination = 0xC0
     case validatedBalance = 0xC1
     case lastSignDate = 0xC2
@@ -139,16 +140,17 @@ public enum TlvTag: Byte {
     /// `TlvValueType` associated with a `TlvTag`
     var valueType: TlvValueType {
         switch self {
-        case .cardId, .batchId, .crExKey, .pin2IsDefault:
+        case .cardId, .batchId, .crExKey:
             return .hexString
-        case .manufacturerName, .firmwareVersion, .issuerName, .blockchainName, .tokenSymbol, .tokenContractAddress,
+        case .manufacturerName, .firmwareVersion, .issuerName, .blockchainName, .tokenSymbol, .tokenName, .tokenContractAddress,
 			 .fullname, .birthday, .gender, .issueDate, .expireDate, .trustedAddress, .fileTypeName:
             return .utf8String
         case .curveId:
             return .ellipticCurve
-        case .maxSignatures, .walletRemainingSignatures, .walletSignedHashes, .userProtectedCounter, .userCounter, .tokenDecimal, .issuerDataCounter:
+        case .maxSignatures, .walletRemainingSignatures, .walletSignedHashes, .userProtectedCounter,
+             .userCounter, .tokenDecimal, .issuerDataCounter, .checkWalletCounter:
             return .intValue
-        case .isActivated, .isLinked, .createWalletAtPersonalize:
+        case .isActivated, .isLinked, .createWalletAtPersonalize, .pin2IsDefault:
             return .boolValue
         case .manufactureDateTime:
             return .dateTime

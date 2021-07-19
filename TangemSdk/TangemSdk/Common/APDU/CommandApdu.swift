@@ -11,6 +11,7 @@ import CoreNFC
 
 /// Class that provides conversion of serialized request and Instruction code
 /// to a raw data that can be sent to the card.
+@available(iOS 13.0, *)
 public struct CommandApdu: Equatable {
     /// Instruction code that determines the type of request for the card.
     let ins: Byte
@@ -61,16 +62,17 @@ public struct CommandApdu: Equatable {
     /// - Parameter encryptionKey: encryption key
     /// - Returns: Encrypted APDU
     public func encrypt(encryptionMode: EncryptionMode, encryptionKey: Data?) throws -> CommandApdu {
-        guard let encryptionKey = encryptionKey, p1 == EncryptionMode.none.rawValue else { //skip if already encrypted or empty encryptionKey
+        guard let encryptionKey = encryptionKey, p1 == EncryptionMode.none.byteValue else { //skip if already encrypted or empty encryptionKey
             return self
         }
         let crc = data.crc16()
         let tlvDataToEncrypt = data.count.bytes2 + crc + data
         let encryptedPayload = try tlvDataToEncrypt.encrypt(with: encryptionKey)
-        return CommandApdu(cla: self.cla, ins: self.ins, p1: encryptionMode.rawValue, p2: self.p2, le: self.le, tlv: Data(encryptedPayload))
+        return CommandApdu(cla: self.cla, ins: self.ins, p1: encryptionMode.byteValue, p2: self.p2, le: self.le, tlv: Data(encryptedPayload))
     }
 }
 
+@available(iOS 13.0, *)
 extension CommandApdu: CustomStringConvertible {
     public var description: String {
         let instruction = Instruction(rawValue: ins) ?? .unknown
@@ -79,6 +81,7 @@ extension CommandApdu: CustomStringConvertible {
     }
 }
 
+@available(iOS 13.0, *)
 extension NFCISO7816APDU {
     convenience init(_ commandApdu: CommandApdu) {
         self.init(instructionClass: commandApdu.cla,

@@ -42,7 +42,15 @@ public enum NetworkServiceError: Error, LocalizedError {
     }
 }
 
+@available(iOS 13.0, *)
 public class NetworkService {
+    private lazy var session: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 10
+        configuration.timeoutIntervalForResource = 30
+        return URLSession(configuration: configuration)
+    }()
+    
     public init () {}
     
     public func requestPublisher(_ endpoint: NetworkEndpoint) -> AnyPublisher<Data, NetworkServiceError> {
@@ -52,7 +60,8 @@ public class NetworkService {
     
     private func requestDataPublisher(request: URLRequest) -> AnyPublisher<Data, NetworkServiceError> {
         Log.network("request to: \(request.url!)")
-        return URLSession.shared.dataTaskPublisher(for: request)
+        
+        return session.dataTaskPublisher(for: request)
             .subscribe(on: DispatchQueue.global())
             .tryMap { data, response -> Data in
                 guard let response = response as? HTTPURLResponse else {

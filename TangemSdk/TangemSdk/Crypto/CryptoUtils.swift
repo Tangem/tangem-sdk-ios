@@ -10,6 +10,7 @@ import Foundation
 import CommonCrypto
 import CryptoKit
 
+@available(iOS 13.0, *)
 public final class CryptoUtils {
     
     /**

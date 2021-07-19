@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(iOS 13.0, *)
 public enum TangemEndpoint: NetworkEndpoint {
     case verifyAndGetInfo(request: CardVerifyAndGetInfoRequest)
     case artwork(cid: String, cardPublicKey: Data, artworkId: String)
@@ -22,7 +23,7 @@ public enum TangemEndpoint: NetworkEndpoint {
             return URL(string: baseURL + "card/verify-and-get-info")!
         case .artwork(let cid, let cardPublicKey, let artworkId):
             let parameters = ["CID" : cid,
-                              "publicKey" : cardPublicKey.asHexString(),
+                              "publicKey" : cardPublicKey.hexString,
                               "artworkId" : artworkId]
             
             var components = URLComponents(string: baseURL + "card/artwork")!
