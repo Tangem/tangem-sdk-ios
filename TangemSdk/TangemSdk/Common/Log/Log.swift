@@ -160,3 +160,14 @@ public extension Log {
         }
     }
 }
+// MARK:- Log formatter helpers
+@available(iOS 13.0, *)
+extension Log {
+    static func sendCommand(_ commandObject: AnyObject) {
+        let commandName = "\(commandObject)".remove("TangemSdk.").remove("Command")
+        let separator = Array(repeating: "=", count: 64).joined()
+        logger.logInternal(separator, level: .command)
+        command("Send command: \(commandName)".titleFormatted)
+        logger.logInternal(separator, level: .command)
+    }
+}

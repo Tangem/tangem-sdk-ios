@@ -68,10 +68,8 @@ extension Command {
     }
 
     func transceive(in session: CardSession, completion: @escaping CompletionResult<CommandResponse>) {
-        let commandName = "\(self)".remove("TangemSdk.").remove("Command")
-        Log.command("=======================") //TODO: refactor
-        Log.command("Send command: \(commandName)")
-        Log.command("=======================")
+        Log.sendCommand(self)
+        
         if preflightReadMode != .none && session.environment.card == nil {
             completion(.failure(.missingPreflightRead))
             return
@@ -94,17 +92,21 @@ extension Command {
     private func transceiveInternal(in session: CardSession, completion: @escaping CompletionResult<CommandResponse>) {
         do {
             session.rememberTag()
-            Log.apdu("----Serialize command:-----")
+            
+            Log.apdu("C-APDU serialization start".titleFormatted)
             let commandApdu = try serialize(with: session.environment)
-            Log.apdu("---------------------------")
+            Log.apdu("C-APDU serialization finish".titleFormatted)
+            
             transceive(apdu: commandApdu, in: session) { result in
                 session.releaseTag()
                 switch result {
                 case .success(let responseApdu):
                     do {
-                        Log.apdu("-----Deserialize response:-----")
+                        
+                        Log.apdu("R-APDU deserialization start".titleFormatted)
                         let responseData = try self.deserialize(with: session.environment, from: responseApdu)
-                        Log.apdu("-------------------------------")
+                        Log.apdu("R-APDU deserialization finish".titleFormatted)
+                        
                         completion(.success(responseData))
                     } catch {
                         completion(.failure(error.toTangemSdkError()))
