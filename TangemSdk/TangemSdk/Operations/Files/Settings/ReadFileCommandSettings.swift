@@ -10,7 +10,7 @@ import Foundation
 
 /// Settings that should be applied in `ReadFileCommand`
 @available (iOS 13.0, *)
-public enum ReadFileCommandSettings: FirmwareRestictible {
+public enum ReadFileCommandSettings: FirmwareRestrictable {
 	case checkFileValidationHash
 	
 	public var minFirmwareVersion: FirmwareVersion {

@@ -200,7 +200,7 @@
 		B01B99F2253039AB00ECB6BF /* ReadFileCommandSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01B99F1253039AB00ECB6BF /* ReadFileCommandSettings.swift */; };
 		B01B9A572530871800ECB6BF /* FileHashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01B9A562530871800ECB6BF /* FileHashHelper.swift */; };
 		B01B9A7A2530B5C200ECB6BF /* Set+FirmwareRestrictible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01B9A792530B5C200ECB6BF /* Set+FirmwareRestrictible.swift */; };
-		B01B9A7F2530B69900ECB6BF /* FirmwareRestrictible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01B9A7E2530B69900ECB6BF /* FirmwareRestrictible.swift */; };
+		B01B9A7F2530B69900ECB6BF /* FirmwareRestrictable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01B9A7E2530B69900ECB6BF /* FirmwareRestrictable.swift */; };
 		B0390F7B25658EEE0061E5ED /* CardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0390F7A25658EEE0061E5ED /* CardSettings.swift */; };
 		B0390F8325658F3B0061E5ED /* ProductMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0390F8225658F3B0061E5ED /* ProductMask.swift */; };
 		B0390F8725658F620061E5ED /* SigningMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0390F8625658F620061E5ED /* SigningMethod.swift */; };
@@ -448,7 +448,7 @@
 		B01B99F1253039AB00ECB6BF /* ReadFileCommandSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFileCommandSettings.swift; sourceTree = "<group>"; };
 		B01B9A562530871800ECB6BF /* FileHashHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHashHelper.swift; sourceTree = "<group>"; };
 		B01B9A792530B5C200ECB6BF /* Set+FirmwareRestrictible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+FirmwareRestrictible.swift"; sourceTree = "<group>"; };
-		B01B9A7E2530B69900ECB6BF /* FirmwareRestrictible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmwareRestrictible.swift; sourceTree = "<group>"; };
+		B01B9A7E2530B69900ECB6BF /* FirmwareRestrictable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmwareRestrictable.swift; sourceTree = "<group>"; };
 		B0390F7A25658EEE0061E5ED /* CardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSettings.swift; sourceTree = "<group>"; };
 		B0390F8225658F3B0061E5ED /* ProductMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductMask.swift; sourceTree = "<group>"; };
 		B0390F8625658F620061E5ED /* SigningMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningMethod.swift; sourceTree = "<group>"; };
@@ -1017,7 +1017,7 @@
 			children = (
 				B00B3330252E0B5A00A9FE96 /* FileWriteSettings.swift */,
 				B01B99F1253039AB00ECB6BF /* ReadFileCommandSettings.swift */,
-				B01B9A7E2530B69900ECB6BF /* FirmwareRestrictible.swift */,
+				B01B9A7E2530B69900ECB6BF /* FirmwareRestrictable.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1354,7 +1354,7 @@
 				5D94475E2652F0D400EA9CD2 /* AnyJSONRPCRunnable.swift in Sources */,
 				5D38D075267A442B0052F67C /* TrustedCardsRepo.swift in Sources */,
 				5D6508262673936900A8D45B /* OptionSetCodable.swift in Sources */,
-				B01B9A7F2530B69900ECB6BF /* FirmwareRestrictible.swift in Sources */,
+				B01B9A7F2530B69900ECB6BF /* FirmwareRestrictable.swift in Sources */,
 				B006971825FFABA10040D203 /* InteractionMode.swift in Sources */,
 				5DDD6C5625D2D14000E48D7B /* TlvLogging.swift in Sources */,
 				5D58202024221E060057EF40 /* CardSession.swift in Sources */,

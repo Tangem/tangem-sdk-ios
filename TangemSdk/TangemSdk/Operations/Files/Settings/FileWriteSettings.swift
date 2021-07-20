@@ -10,7 +10,7 @@ import Foundation
 
 /// Settings that will be used while writing files on card
 @available (iOS 13.0, *)
-public enum FileWriteSettings: Hashable, FirmwareRestictible {
+public enum FileWriteSettings: Hashable, FirmwareRestrictable {
 	case none, verifiedWithPasscode
 	
 	public var minFirmwareVersion: FirmwareVersion {

@@ -1,5 +1,5 @@
 //
-//  FirmwareRestrictible.swift
+//  FirmwareRestrictable.swift
 //  TangemSdk
 //
 //  Created by Andrew Son on 10/9/20.
@@ -10,7 +10,7 @@ import Foundation
 
 /// Protocol that determines what firmware versions will be capable for performing command
 @available (iOS 13.0, *)
-public protocol FirmwareRestictible {
+public protocol FirmwareRestrictable {
 	var minFirmwareVersion: FirmwareVersion { get }
 	var maxFirmwareVersion: FirmwareVersion { get }
 }

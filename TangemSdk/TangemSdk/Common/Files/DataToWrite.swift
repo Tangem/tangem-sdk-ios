@@ -9,7 +9,7 @@
 import Foundation
 
 @available (iOS 13.0, *)
-public protocol DataToWrite: FirmwareRestictible {
+public protocol DataToWrite: FirmwareRestrictable {
 	var data: Data { get }
 	var requiredPasscode: Bool { get }
 	func addStartingTlvData(_ tlvBuilder: TlvBuilder, withEnvironment environment: SessionEnvironment) throws ->  TlvBuilder
